@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Recoleta';
+    src: url('./Recoleta/Recoleta-SemiBold.eot');
+    src: local('Recoleta Semi Bold'), local('Recoleta-SemiBold'),
+    url('./Recoleta/Recoleta-SemiBold.eot?#iefix') format('embedded-opentype'),
+    url('./Recoleta/Recoleta-SemiBold.woff2') format('woff2'),
+    url('./Recoleta/Recoleta-SemiBold.woff') format('woff'),
+    url('./Recoleta/Recoleta-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Remachine';
+    src: url('./Remachine/Remachine.ttf');
+}
