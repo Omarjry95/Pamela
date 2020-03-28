@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "pamela",
+    "host": "localhost",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "seederStorage": "sequelize"
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "pamela",
+    "host": "localhost",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "",
+    "database": "pamela",
+    "host": "localhost",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
