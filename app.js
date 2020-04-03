@@ -6,11 +6,15 @@ var logger = require('morgan');
 const cors = require('cors');
 const sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
+var multer  = require('multer');
 
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var artistsRouter = require('./routes/artists');
+var genresRouter = require('./routes/genres');
+var externalsRouter = require('./routes/externals');
 
 var dbConfig = require('./config/config');
 
@@ -33,7 +37,10 @@ seq.authenticate()
 
 var app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +54,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/artists', artistsRouter);
+app.use('/genres', genresRouter);
+app.use('/externals', externalsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

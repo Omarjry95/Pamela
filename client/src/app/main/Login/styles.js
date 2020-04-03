@@ -102,9 +102,5 @@ export const styles = theme => ({
             backgroundColor: theme.secondaryColor,
             color: theme.primaryColor,
         }
-    },
-    "@keyframes spin": {
-        from: {transform: 'rotate(0deg)'},
-        to: {transform: 'rotate(360deg)'},
-    },
+    }
 });

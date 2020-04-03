@@ -92,7 +92,14 @@ class userService extends FuseUtils.EventEmitter
         const transaction = db.transaction('pamela_current_user_db', 'readwrite');
         const store = transaction.objectStore('pamela_current_user_db');
 
-        await store.put(data.user);
+        const user = {
+            id: data.user.id,
+            username: data.user.username,
+            lastSignIn: data.user.lastSignIn,
+            profilePicture: data.user.profilePicture
+        };
+
+        await store.put(user);
 
         await transaction.done;
     };

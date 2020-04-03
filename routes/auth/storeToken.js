@@ -3,11 +3,17 @@
 */
 const storeToken = (res, token) =>
 {
+    let expiryDate = new Date();
+
+    expiryDate.setSeconds(expiryDate.getSeconds() + parseInt(process.env.EXPIRATION));
+
     return res.cookie('user_jwt', token,
         {
-            expires: new Date(Date.now() + process.env.EXPIRATION),
+            expires: expiryDate,
             secure: false,
+            //sameSite: 'none',
             httpOnly: true,
     });
 };
+
 module.exports = storeToken;

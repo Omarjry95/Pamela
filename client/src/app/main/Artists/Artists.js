@@ -14,6 +14,12 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DialogContent from "@material-ui/core/DialogContent";
 import NewArtist from "../New Artist/NewArtist";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import * as Actions from '../../store/actions';
+import Drawer from "@material-ui/core/Drawer";
+import { openDB } from 'idb';
+import _ from '../../utils/lodash';
 
 function a11yProps(index)
 {
@@ -39,8 +45,8 @@ function label(icon, label)
             alt="Add"
             variant="square"
             style={{
-                width: '40px',
-                height: '40px',
+                width: '35px',
+                height: '35px',
                 margin: '0 10px 0 0'
             }}
         />
@@ -66,14 +72,27 @@ export class Artists extends Component
 
         this.state = {
             open: false,
+            drawer: false,
             tab: 0,
+            step: 1,
+
             newIcon: "primary"
         }
     }
 
+    toggleIcon = (newIcon) => event =>
+    {
+        this.setState({ newIcon });
+    };
+
     handleDialog = (open) => event =>
     {
         this.setState({ open });
+    };
+
+    handleDrawer = (drawer) => event =>
+    {
+        this.setState({ drawer });
     };
 
     handleTab = (event, tab) =>
@@ -81,15 +100,93 @@ export class Artists extends Component
         this.setState({ tab });
     };
 
-    toggleIcon = (newIcon) => event =>
+    handleStep = (move) => event =>
     {
-        this.setState({ newIcon });
+        let step = this.state.step + move;
+
+        this.setState({ step });
+    };
+
+    adjustLinks = (links) =>
+    {
+        let data = [];
+
+        for (let i = 0; i < links.length; i++)
+        {
+            const link = _.find(this.props.externals.list, function (l) { return l.id === links[i].id; });
+
+            let external;
+
+            if (link)
+            {
+                external = {
+                    id: links[i].id,
+                    name: null,
+                    url: links[i].url
+                };
+            }
+            else
+            {
+                external = {
+                    id: null,
+                    name: links[i].name,
+                    url: links[i].url
+                };
+            }
+
+            data.push(external);
+        }
+
+        return data;
+    };
+
+    sendArtist = async event =>
+    {
+        let db = await openDB('pamela_current_user_db', 1);
+
+        const transaction = db.transaction('pamela_current_user_db');
+        const store = transaction.objectStore('pamela_current_user_db');
+
+        const user = await store.get(1);
+
+        if (user)
+        {
+            const artist = {
+                id: user.id,
+                name: this.props.artist.name,
+                image: this.props.artist.image,
+                genres: this.props.artist.genres,
+                links: this.adjustLinks(this.props.artist.links)
+            };
+
+            if (artist.image)
+            {
+                let musician = new FormData();
+
+                musician.append('id', artist.id);
+                musician.append('name', artist.name);
+                musician.append('image', artist.image);
+                musician.append('genres', JSON.stringify(artist.genres));
+                musician.append('links', JSON.stringify(artist.links));
+
+                await this.props.addArtist(musician);
+            }
+            else
+            {
+                await this.props.addArtistWithoutImage(artist);
+            }
+
+            if (this.props.artists.operation)
+            {
+                this.setState({ open: false, drawer: false, tab: 0, step: 1})
+            }
+        }
     };
 
     render()
     {
-        const {classes} = this.props;
-        const {open, tab, newIcon} = this.state;
+        const {classes, artist} = this.props;
+        const {open, drawer, tab, step, newIcon} = this.state;
 
         return (
             <div className={classes.root}>
@@ -126,7 +223,7 @@ export class Artists extends Component
                 <Dialog
                     open={open}
                     onClose={this.handleDialog(false)}
-                    PaperProps={{classes: {rounded: classes.rounded}}}
+                    PaperProps={{classes: {root: classes.dialog, rounded: classes.rounded}}}
                 >
                     <DialogTitle className={classes.header}>
                         <Tabs
@@ -147,10 +244,100 @@ export class Artists extends Component
                             />
                         </Tabs>
                     </DialogTitle>
+
                     <DialogContent className={classes.content}>
-                        <NewArtist tab={tab} />
+                        <NewArtist tab={tab} step={step} />
                     </DialogContent>
+
+                    <DialogActions
+                        className={classes.footer}
+                    >
+                        {step > 1 &&
+                        (<Button
+                            className={classes.button}
+                            onClick={this.handleStep(-1)}
+                            style={{float: 'left'}}
+                        >
+                            <Typography
+                                variant="caption"
+                                className={classes.buttonHeading}
+                            >
+                                Previous
+                            </Typography>
+                        </Button>)}
+
+                        {(step < 4 && artist.name.length > 0) &&
+                        (<Button
+                            className={classes.button}
+                            onClick={this.handleStep(1)}
+                            style={{float: 'right'}}
+                        >
+                            <Typography
+                                variant="caption"
+                                className={classes.buttonHeading}
+                            >
+                                Next
+                            </Typography>
+                        </Button>)}
+
+                        {artist.name.length > 0 &&
+                        (<Button
+                            className={classes.button}
+                            onClick={this.handleDrawer(true)}
+                            style={{float: 'right', margin: '0 10px 0 0'}}
+                        >
+                            <Typography
+                                variant="caption"
+                                className={classes.buttonHeading}
+                            >
+                                Confirm
+                            </Typography>
+                        </Button>)}
+                    </DialogActions>
                 </Dialog>
+
+                <Drawer
+                    anchor="bottom"
+                    open={drawer}
+                    onClose={this.handleDrawer(false)}
+                    classes={{paper: classes.drawer}}
+                >
+                    <div className={classes.container_drawer}>
+                        <Typography
+                            variant="body2"
+                            className={classes.drawerHeading}
+                        >
+                            Do you confirm adding "{artist.name}" to your artists' collection ?
+                        </Typography>
+
+                        <div className={classes.container_drawer_1}>
+                            <Button
+                                className={classes.button}
+                                onClick={this.handleDrawer(false)}
+                                style={{margin: '0 10px 0 0'}}
+                            >
+                                <Typography
+                                    variant="caption"
+                                    className={classes.buttonHeading}
+                                >
+                                    No
+                                </Typography>
+                            </Button>
+
+                            <Button
+                                className={classes.button}
+                                onClick={this.sendArtist}
+                            >
+                                <Typography
+                                    variant="caption"
+                                    className={classes.buttonHeading}
+                                >
+                                    Yes
+                                </Typography>
+                            </Button>
+                        </div>
+                    </div>
+                </Drawer>
             </div>
         );
     }
@@ -159,14 +346,17 @@ export class Artists extends Component
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-
+        addArtist: Actions.addArtist,
+        addArtistWithoutImage: Actions.addArtistWithoutImage
     }, dispatch);
 }
 
-function mapStateToProps({})
+function mapStateToProps({newArtist, artists})
 {
     return {
-
+        artists: artists.artistsList,
+        artist: newArtist.artist,
+        externals: newArtist.externals
     }
 }
 

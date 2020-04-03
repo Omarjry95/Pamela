@@ -36,7 +36,7 @@ router.post('/signin', function(req, res, next)
                 if (result)
                 {
                     jwt.sign({id: user.username, createdAt: user.createdAt}, process.env.SECRET,
-                        {expiresIn: process.env.EXPIRATION},
+                        {expiresIn: parseInt(process.env.EXPIRATION)},
 
                         async function (error, token)
                         {
@@ -75,8 +75,9 @@ router.post('/signin', function(req, res, next)
                                 {
                                     const response = {
                                         success: false,
-                                        message: "Some internal server error has occured while attempting to proceed " +
-                                            "with your request, please try again."
+                                        message:
+                                            "Some internal server error has occured while attempting to proceed "
+                                            + "with your request, please try again."
                                     };
 
                                     prepareResponse(res, 500, response, 'application/json');

@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) =>
+  {
     return queryInterface.addColumn('Users', 'profilePicture', {
       type: Sequelize.STRING,
       allowNull: true,

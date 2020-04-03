@@ -67,7 +67,7 @@ export class User extends Component
         if (period === 1)
         {
             period = "one";
-            const unit = units[index - 1].substr(0, units[index - 1] - 2);
+            const unit = units[index - 1].substr(0, units[index - 1].length - 1);
 
             return period + " " + unit;
         }
@@ -93,7 +93,7 @@ export class User extends Component
                         className={classes.caption}
                         variant="caption"
                     >
-                        {"Active " + this.getPeriod(user.lastSignIn) + " ago"}
+                        {"Last logged in: " + this.getPeriod(user.lastSignIn) + " ago"}
                     </Typography>
                 </div>
 

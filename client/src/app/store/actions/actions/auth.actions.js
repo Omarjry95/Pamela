@@ -1,4 +1,4 @@
-import userService from '../../../services/userService'
+import userService from '../../../services/userService';
 
 export const UPDATE_LOGIN_STATE = 'UPDATE_LOGIN_STATE';
 export const LOG_OUT = 'LOG_OUT';

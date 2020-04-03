@@ -102,7 +102,7 @@ export class Login extends Component
 
         await this.props.signIn(credentials);
 
-        await this.props.signInSpotify();
+        //await this.props.signInSpotify();
 
         this.setState({loading: false});
 

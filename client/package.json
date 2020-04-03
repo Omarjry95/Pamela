@@ -21,7 +21,8 @@
     "typeface-bubblegum-sans": "0.0.72",
     "typeface-merriweather": "0.0.72",
     "typeface-patua-one": "0.0.71",
-    "typeface-pt-serif": "0.0.72"
+    "typeface-pt-serif": "0.0.72",
+    "classnames": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,5 +51,6 @@
     "react-redux": "^7.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2"
-  }
+  },
+  "proxy": "http://localhost:5000/"
 }

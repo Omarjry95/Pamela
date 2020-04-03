@@ -51,6 +51,10 @@ export const styles = theme => ({
         fontFamily: 'Merriweather',
         fontWeight: 'bold'
     },
+    dialog: {
+        width: '100%',
+        maxHeight: '90%'
+    },
     rounded: {
         borderRadius: '3px'
     },
@@ -61,12 +65,64 @@ export const styles = theme => ({
         padding: 0
     },
     tab: {
-        width: '50%',
+        minWidth: '50%',
+        maxWidth: '100%',
         padding: '10px 10px',
         backgroundColor: theme.secondaryColor
     },
     indicator: {
         height: '3px',
         backgroundColor: theme.primaryColor
-    }
+    },
+    footer: {
+        width: 'calc(100% - 20px)',
+        padding: '10px',
+        display: 'block'
+    },
+    button: {
+        padding: '5px 10px',
+        border: '2px solid ' + theme.secondaryColor,
+        borderRadius: '5px',
+        '&:hover': {
+            cursor: 'pointer',
+            backgroundColor: theme.secondaryColor,
+            '& $buttonHeading': {
+                color: theme.primaryColor
+            }
+        }
+    },
+    buttonHeading: {
+        color: theme.secondaryColor,
+        fontFamily: 'Merriweather',
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+    },
+    drawer: {
+        height: '15%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    container_drawer: {
+        width: '100%',
+        height: '100%',
+        padding: '5px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    drawerHeading: {
+        margin: '0 0 20px 0',
+        color: theme.secondaryColor,
+        fontFamily: 'Merriweather',
+        fontWeight: 'bold',
+    },
+    container_drawer_1: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 });

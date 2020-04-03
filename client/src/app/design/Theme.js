@@ -8,7 +8,8 @@ function Theme({children})
 
     mainTheme.primaryColor = '#E6F14A';
     mainTheme.secondaryColor = '#388697';
-    mainTheme.thirdColor = '#25436D';
+
+    mainTheme.subColor = '#25436D';
 
     return (
         <MuiThemeProvider theme={mainTheme}>
